@@ -1,0 +1,1 @@
+import MovieCard from "./MovieCard.jsx";export default function MovieGrid({movies,favorites,onToggle}){return movies.length?<div className="grid">{movies.map(m=><MovieCard key={m.id} movie={m} favorite={favorites.some(f=>f.id===m.id)} onToggle={onToggle}/>)}</div>:<div className="empty"><h2>No movies found</h2><p>Try another search.</p></div>}
