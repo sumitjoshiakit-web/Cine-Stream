@@ -1,23 +1,17 @@
-const BASE = "https://api.themoviedb.org/3";
-const TOKEN = import.meta.env.VITE_TMDB_API_TOKEN;
+const BASE = "/api/tmdb";
 
 async function request(path, signal) {
-  if (!TOKEN) {
-    throw new Error("TMDB API token is missing. Add VITE_TMDB_API_TOKEN.");
-  }
-
-  const response = await fetch(BASE + path, {
-    headers: {
-      Authorization: "Bearer " + TOKEN,
-    },
+  const response = await fetch(`${BASE}?path=${encodeURIComponent(path)}`, {
     signal,
   });
 
   if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+
     throw new Error(
       response.status === 429
         ? "TMDB rate limit reached."
-        : `TMDB request failed (${response.status}).`
+        : data.error || `TMDB request failed (${response.status}).`
     );
   }
 
